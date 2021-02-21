@@ -1,5 +1,9 @@
 #+TITLE: Emacs Config
 
+This is my personal configuration for Doom Emacs, in order to install Doom Emacs refer to: https://github.com/hlissner/doom-emacs.
+
+The README.org of this project contains all source blocks that are on config.el file.
+
 * Table of Contents :toc:
 :PROPERTIES:
 :header-args: :tangle ~/.doom.d/config.el
