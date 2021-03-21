@@ -58,23 +58,18 @@
 ; Make horizontal movement cross lines
 (setq-default evil-cross-lines t)
 
-(use-package ob-translate)
+(require 'google-translate)
+(require 'google-translate-default-ui)
+(require 'google-translate-smooth-ui)
+(global-set-key "\C-ct" 'google-translate-at-point)
+(global-set-key "\C-cT" 'google-translate-query-translate)
+(global-set-key (kbd "C-c y") 'google-translate-at-point-reverse)
+(global-set-key (kbd "C-c Y") 'google-translate-query-translate-reverse)
 
-;(require 'google-translate)
-;(require 'google-translate-default-ui)
-;(require 'google-translate-smooth-ui)
-;(global-set-key "\C-ct" 'google-translate-smooth-translate)
-;(global-set-key "\C-cy" 'google-translate-at-point)
-;(setq google-translate-translation-directions-alist '(("de" . "en"), ("en" "de")))
-
-;(global-set-key "\C-ct" 'google-translate-at-point)
-;(global-set-key "\C-cT" 'google-translate-query-translate)
-
-(setq go-translate-local-language "de")
-(setq go-translate-target-language "en")
-(global-set-key "\C-ct" 'go-translate)
-(global-set-key "\C-cy" 'go-translate-popup)
-(setq go-translate-token-current (cons 430675 2721866130))
+(setq google-translate-default-source-language "de")
+(setq google-translate-default-target-language "en")
+(defun google-translate--search-tkk () "Search TKK." (list 430675 2721866130))
+(setq google-translate-backend-method 'curl)
 
 (require 'org)
 (require 'ob-clojure)
