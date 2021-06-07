@@ -1,11 +1,20 @@
 (setq user-full-name "Vinicius Tozzi"
       user-mail-address "viniciustozzi@pm.me")
 
-(setq doom-font (font-spec :family "Fira Mono" :size 16))
+(map! :leader
+      (:prefix-map ("l" . "LSP")
+        :desc "Format code" "f" #'lsp-format-buffer
+        :desc "Find reference" "r" #'lsp-find-references))
+
+(global-set-key (kbd "C-M-l") 'lsp-format-buffer)
+(global-set-key (kbd "M-<f7>") 'lsp-find-references)
+(global-set-key (kbd "M-7") 'lsp-find-references)
+
+;(setq doom-font (font-spec :family "Fira Mono" :size 16))
 ;(setq doom-theme 'doom-gruvbox)
 ;(setq doom-theme 'doom-dracula)
 ;(setq doom-theme 'doom-Iosvkem)
-(setq doom-theme 'gruber-darker)
+;(setq doom-theme 'gruber-darker)
 ;(setq tao-theme-use-sepia nil)
 
 (beacon-mode 1)
@@ -58,18 +67,23 @@
 ; Make horizontal movement cross lines
 (setq-default evil-cross-lines t)
 
-(require 'google-translate)
-(require 'google-translate-default-ui)
-(require 'google-translate-smooth-ui)
-(global-set-key "\C-ct" 'google-translate-at-point)
-(global-set-key "\C-cT" 'google-translate-query-translate)
-(global-set-key (kbd "C-c y") 'google-translate-at-point-reverse)
-(global-set-key (kbd "C-c Y") 'google-translate-query-translate-reverse)
+(use-package ob-translate)
 
-(setq google-translate-default-source-language "de")
-(setq google-translate-default-target-language "en")
-(defun google-translate--search-tkk () "Search TKK." (list 430675 2721866130))
-(setq google-translate-backend-method 'curl)
+;(require 'google-translate)
+;(require 'google-translate-default-ui)
+;(require 'google-translate-smooth-ui)
+;(global-set-key "\C-ct" 'google-translate-smooth-translate)
+;(global-set-key "\C-cy" 'google-translate-at-point)
+;(setq google-translate-translation-directions-alist '(("de" . "en"), ("en" "de")))
+
+;(global-set-key "\C-ct" 'google-translate-at-point)
+;(global-set-key "\C-cT" 'google-translate-query-translate)
+
+(setq go-translate-local-language "de")
+(setq go-translate-target-language "en")
+(global-set-key "\C-ct" 'go-translate)
+(global-set-key "\C-cy" 'go-translate-popup)
+(setq go-translate-token-current (cons 430675 2721866130))
 
 (require 'org)
 (require 'ob-clojure)
@@ -115,17 +129,67 @@
         ("/.mail/Drafts"     . ?d)
         ("/.mail/Trash"      . ?t)))
 
-;;Configuration for exwm
-;;(require 'exwm)
-;;(require 'exwm-config)
-;;(exwm-config-default)
-;(require 'exwm-randr)
+(defun efs/exwm-update-class()
+  (exwm-workspace-rename-buffer exwm-class-name))
 
-;(setq exwm-randr-workspace-output-plist '(0 "LVDS1"))
-;(add-hook 'exwm-randr-screen-change-hook
-;          (lambda()
- ;           (start-process-shell-command
-  ;           "xrandr" nil "xrandr --output LSVDS1 --mode 1600x900 --pos 0x0 --rotate normal")))
-;(exwm-randr-enable)
-;(require 'exwm-systemtray)
-;(exwm-systemtray-enable)
+(setq exwm-workspace-number 5)
+
+ ;; When window "class" updates, use it to set the buffer name
+(add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+
+  ;; Rebind CapsLock to Ctrl
+(start-process-shell-command "xmodmap" nil "xmodmap ~/.emacs.d/exwm/Xmodmap")
+
+  ;; Set the screen resolution (update this to be the correct resolution for your screen!)
+(require 'exwm-randr)
+(exwm-randr-enable)
+  ;; (start-process-shell-command "xrandr" nil "xrandr --output Virtual-1 --primary --mode 2048x1152 --pos 0x0 --rotate normal")
+
+  ;; Load the system tray before exwm-init
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+
+  ;; These keys should always pass through to Emacs
+(setq exwm-input-prefix-keys
+  '(?\C-x
+    ?\C-u
+    ?\C-h
+    ?\M-x
+    ?\M-`
+    ?\M-&
+    ?\M-:
+    ?\C-\M-j  ;; Buffer list
+    ?\C-\ ))  ;; Ctrl+Space
+
+  ;; Ctrl+Q will enable the next key to be sent directly
+(define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+
+  ;; Set up global key bindings.  These always work, no matter the input state!
+  ;; Keep in mind that changing this list after EXWM initializes has no effect.
+(setq exwm-input-global-keys
+      `(
+          ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
+        ([?\s-r] . exwm-reset)
+
+          ;; Move between windows
+
+        ([s-right] . windmove-right)
+        ([s-up] . windmove-up)
+        ([s-down] . windmove-down)
+
+          ;; Launch applications via shell command
+        ([?\s-&] . (lambda (command)
+                (interactive (list (read-shell-command "$ ")))
+                (start-process-shell-command command nil command)))
+
+          ;; Switch workspace
+        ([?\s-w] . exwm-workspace-switch)
+        ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
+
+          ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+        ,@(mapcar (lambda (i)
+                `(,(kbd (format "s-%d" i)) .
+                (lambda ()
+
+                        (exwm-workspace-switch-create ,i))))
+                (number-sequence 0 9))))
