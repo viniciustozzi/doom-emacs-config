@@ -10,6 +10,12 @@
 (global-set-key (kbd "M-<f7>") 'lsp-find-references)
 (global-set-key (kbd "M-7") 'lsp-find-references)
 
+(map! :leader
+      (:prefix-map ("t" . "Tab Mode")
+        :desc "New Tab" "n" #'tab-bar-new-tab
+        :desc "Search Tab By Name" "SPC" #'tab-bar-select-tab-by-name
+        :desc "Switch Tab" "s" #'tab-bar-switch-to-next-tab))
+
 ;(setq doom-font (font-spec :family "Fira Mono" :size 16))
 ;(setq doom-theme 'doom-gruvbox)
 ;(setq doom-theme 'doom-dracula)

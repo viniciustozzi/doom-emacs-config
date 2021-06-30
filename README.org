@@ -5,7 +5,8 @@
 :header-args: :tangle ~/.doom.d/config.el
 :END:
   - [[#identification][Identification]]
-  - [[#custom-keybindings][Custom keybindings]]
+  - [[#lsp][LSP]]
+  - [[#tab-bar-mode][tab-bar-mode]]
   - [[#design][Design]]
   - [[#org-mode][Org Mode]]
   - [[#shell][Shell]]
@@ -25,8 +26,8 @@ Some functionality uses this to identify you, e.g. GPG configuration, email
 (setq user-full-name "Vinicius Tozzi"
       user-mail-address "viniciustozzi@pm.me")
 #+end_src
-** Custom keybindings
-*** Flutter
+
+** LSP
 #+begin_src elisp
 (map! :leader
       (:prefix-map ("l" . "LSP")
@@ -36,6 +37,16 @@ Some functionality uses this to identify you, e.g. GPG configuration, email
 (global-set-key (kbd "C-M-l") 'lsp-format-buffer)
 (global-set-key (kbd "M-<f7>") 'lsp-find-references)
 (global-set-key (kbd "M-7") 'lsp-find-references)
+#+end_src
+
+** tab-bar-mode
+This is a mode for organizing workspaces/buffers in Emacs
+#+begin_src elisp
+(map! :leader
+      (:prefix-map ("t" . "Tab Mode")
+        :desc "New Tab" "n" #'tab-bar-new-tab
+        :desc "Search Tab By Name" "SPC" #'tab-bar-select-tab-by-name
+        :desc "Switch Tab" "s" #'tab-bar-switch-to-next-tab))
 #+end_src
 
 ** Design
