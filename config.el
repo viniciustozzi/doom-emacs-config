@@ -16,7 +16,7 @@
         :desc "Search Tab By Name" "SPC" #'tab-bar-select-tab-by-name
         :desc "Switch Tab" "s" #'tab-bar-switch-to-next-tab))
 
-;(setq doom-font (font-spec :family "Fira Mono" :size 16))
+(setq doom-font (font-spec :family "Fira Mono" :size 16))
 ;(setq doom-theme 'doom-gruvbox)
 ;(setq doom-theme 'doom-dracula)
 ;(setq doom-theme 'doom-Iosvkem)
@@ -43,6 +43,7 @@
         ("j" "Journal entry" plain (function org-journal-find-location)
                                "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
                                :jump-to-captured t :immediate-finish t)))
+
 ;;When text mode always auto fill and center the buffer at the screen
 (add-hook 'text-mode-hook
           'auto-fill-mode)
