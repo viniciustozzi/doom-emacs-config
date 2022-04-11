@@ -13,8 +13,11 @@
 (package! tao-theme)
 (package! gruber-darker-theme)
 (package! exec-path-from-shell)
+(package! forest-blue-theme)
 
-(package! exwm)
+;(package! exwm)
+(package! green-phosphor-theme)
+(package! olivetti)
 ;(package! exwm)
 ;(package! alda-mode)
 

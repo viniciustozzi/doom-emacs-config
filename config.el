@@ -22,6 +22,7 @@
 ;(setq doom-theme 'doom-Iosvkem)
 ;(setq doom-theme 'gruber-darker)
 ;(setq tao-theme-use-sepia nil)
+(setq doom-theme 'doom-one-light)
 
 (beacon-mode 1)
 
@@ -42,19 +43,26 @@
         ("j" "Journal entry" plain (function org-journal-find-location)
                                "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
                                :jump-to-captured t :immediate-finish t)))
+;;When text mode always auto fill and center the buffer at the screen
+(add-hook 'text-mode-hook
+          'auto-fill-mode)
+
+(add-hook 'text-mode-hook
+          'olivetti-mode)
+
 
 ;Org journal
-(setq org-journal-dir "~/org/roam/journal")
-
-(defun org-journal-find-location ()
+;Currently disabled as I am trying to use org-roam-dailies instead of org-journal
+;(setq org-journal-dir "~/org/roam/journal")
+;(defun org-journal-find-location ()
   ;; Open today's journal, but specify a non-nil prefix argument in order to
   ;; inhibit inserting the heading; org-capture will insert the heading.
-  (org-journal-new-entry t)
-  (unless (eq org-journal-file-type 'daily)
-    (org-narrow-to-subtree))
-  (goto-char (point-max)))
+;  (org-journal-new-entry t)
+;  (unless (eq org-journal-file-type 'daily)
+;    (org-narrow-to-subtree))
+;  (goto-char (point-max)))
 
-(setq org-journal-enable-agenda-integration t)
+;(setq org-journal-enable-agenda-integration t)
 
 (setq shell-file-name "/bin/bash")
 
@@ -116,86 +124,21 @@
 (when (daemonp)
   (exec-path-from-shell-initialize))
 
-(setq user-mail-address "viniciustozzi@protonmail.com"
-      user-full-name  "Vinicius Vieira Tozzi"
-      mu4e-get-mail-command "mbsync -c ~/.mbsyncrc -a"
-      mu4e-update-interval  300
-      mu4e-main-buffer-hide-personal-addresses t
-      message-send-mail-function 'smtpmail-send-it
-      smtpmail-smtp-server "localhost"
-      smtpmail-stream-type 'starttls
-      smtpmail-auth-credentials "gpg2 --quiet --decrypt ~/.mbsync-pw-mailbox.gpg"
-      smtpmail-smtp-service 1025
-      mu4e-sent-folder "/.mail/Sent"
-      mu4e-drafts-folder "/.mail/Drafts"
-      mu4e-trash-folder "/.mail/Trash"
-      mu4e-maildir-shortcuts
-      '(("/.mail/Inbox"      . ?i)
-        ("/.mail/Sent" . ?s)
-        ("/.mail/Drafts"     . ?d)
-        ("/.mail/Trash"      . ?t)))
-
-(defun efs/exwm-update-class()
-  (exwm-workspace-rename-buffer exwm-class-name))
-
-(setq exwm-workspace-number 5)
-
- ;; When window "class" updates, use it to set the buffer name
-(add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
-
-  ;; Rebind CapsLock to Ctrl
-(start-process-shell-command "xmodmap" nil "xmodmap ~/.emacs.d/exwm/Xmodmap")
-
-  ;; Set the screen resolution (update this to be the correct resolution for your screen!)
-(require 'exwm-randr)
-(exwm-randr-enable)
-  ;; (start-process-shell-command "xrandr" nil "xrandr --output Virtual-1 --primary --mode 2048x1152 --pos 0x0 --rotate normal")
-
-  ;; Load the system tray before exwm-init
-(require 'exwm-systemtray)
-(exwm-systemtray-enable)
-
-  ;; These keys should always pass through to Emacs
-(setq exwm-input-prefix-keys
-  '(?\C-x
-    ?\C-u
-    ?\C-h
-    ?\M-x
-    ?\M-`
-    ?\M-&
-    ?\M-:
-    ?\C-\M-j  ;; Buffer list
-    ?\C-\ ))  ;; Ctrl+Space
-
-  ;; Ctrl+Q will enable the next key to be sent directly
-(define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
-
-  ;; Set up global key bindings.  These always work, no matter the input state!
-  ;; Keep in mind that changing this list after EXWM initializes has no effect.
-(setq exwm-input-global-keys
-      `(
-          ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
-        ([?\s-r] . exwm-reset)
-
-          ;; Move between windows
-
-        ([s-right] . windmove-right)
-        ([s-up] . windmove-up)
-        ([s-down] . windmove-down)
-
-          ;; Launch applications via shell command
-        ([?\s-&] . (lambda (command)
-                (interactive (list (read-shell-command "$ ")))
-                (start-process-shell-command command nil command)))
-
-          ;; Switch workspace
-        ([?\s-w] . exwm-workspace-switch)
-        ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
-
-          ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
-        ,@(mapcar (lambda (i)
-                `(,(kbd (format "s-%d" i)) .
-                (lambda ()
-
-                        (exwm-workspace-switch-create ,i))))
-                (number-sequence 0 9))))
+;; (setq user-mail-address "viniciustozzi@protonmail.com"
+;;       user-full-name  "Vinicius Vieira Tozzi"
+;;       mu4e-get-mail-command "mbsync -c ~/.mbsyncrc -a"
+;;       mu4e-update-interval  300
+;;       mu4e-main-buffer-hide-personal-addresses t
+;;       message-send-mail-function 'smtpmail-send-it
+;;       smtpmail-smtp-server "localhost"
+;;       smtpmail-stream-type 'starttls
+;;       smtpmail-auth-credentials "gpg2 --quiet --decrypt ~/.mbsync-pw-mailbox.gpg"
+;;       smtpmail-smtp-service 1025
+;;       mu4e-sent-folder "/.mail/Sent"
+;;       mu4e-drafts-folder "/.mail/Drafts"
+;;       mu4e-trash-folder "/.mail/Trash"
+;;       mu4e-maildir-shortcuts
+;;       '(("/.mail/Inbox"      . ?i)
+;;         ("/.mail/Sent" . ?s)
+;;         ("/.mail/Drafts"     . ?d)
+;;         ("/.mail/Trash"      . ?t)))
