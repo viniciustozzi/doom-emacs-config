@@ -31,7 +31,7 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
-(setq org-agenda-files '("~/org/roam/"))
+(setq org-agenda-files '("~/org/roam/daily"))
 (setq org-roam-index-file "~/org/index.org")
 
 ;;Org templates
@@ -44,13 +44,11 @@
                                "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
                                :jump-to-captured t :immediate-finish t)))
 
-;;When text mode always auto fill and center the buffer at the screen
-(add-hook 'text-mode-hook
-          'auto-fill-mode)
-
+;;When text mode center content in screen
+(require 'olivetti)
 (add-hook 'text-mode-hook
           'olivetti-mode)
-
+(olivetti-set-width 100)
 
 ;Org journal
 ;Currently disabled as I am trying to use org-roam-dailies instead of org-journal
