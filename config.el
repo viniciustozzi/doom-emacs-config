@@ -28,21 +28,25 @@
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-(setq org-agenda-files '("~/org/roam/daily"))
-(setq org-roam-index-file "~/org/index.org")
-
-;;Org templates
-(setq org-capture-templates
+(after! org
+  (setq org-hide-emphasis-markers t
+      org-pretty-entities t
+      org-ellipsis " ▾"
+      org-log-done 'time
+      org-directory "~/org/"
+      org-agenda-files '("~/org/roam/daily"))
+  (setq org-roam-index-file "~/org/index.org")
+  (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/roam/inbox.org" "Tasks")
          "* TODO %? %i")
         ("T" "Todo Tagged" entry (file+headline "~/org/roam/inbox.org" "Tasks")
          "* TODO %? %i %^g")
         ("j" "Journal entry" plain (function org-journal-find-location)
                                "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
-                               :jump-to-captured t :immediate-finish t)))
+                               :jump-to-captured t :immediate-finish t))))
+
+;;Org templates
+
 
 ;;When text mode center content in screen
 (require 'olivetti)
@@ -66,19 +70,6 @@
 (setq shell-file-name "/bin/bash")
 
 (setq display-line-numbers-type 'visual)
-
-;(define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-;(define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-;(define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-;(define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-
-(use-package-hook! evil
-  :pre-init
-  (setq evil-respect-visual-line-mode t) ;; sane j and k behavior
-  t)
-
-; Make horizontal movement cross lines
-(setq-default evil-cross-lines t)
 
 (use-package ob-translate)
 
