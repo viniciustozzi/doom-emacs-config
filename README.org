@@ -65,9 +65,8 @@ This is a mode for organizing workspaces/buffers in Emacs
 ;(setq doom-theme 'doom-gruvbox)
 ;(setq doom-theme 'doom-dracula)
 ;(setq doom-theme 'doom-Iosvkem)
-;(setq doom-theme 'gruber-darker)
+(setq doom-theme 'gruber-darker)
 ;(setq tao-theme-use-sepia nil)
-(setq doom-theme 'doom-one-light)
 
 (beacon-mode 1)
 
@@ -82,7 +81,10 @@ This is a mode for organizing workspaces/buffers in Emacs
       org-ellipsis " ▾"
       org-log-done 'time
       org-directory "~/org/"
-      org-agenda-files '("~/org/roam/daily"))
+      org-agenda-files '("~/org/roam/daily")
+      org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" ))
+      org-todo-keywords-1 '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" ))
+      )
   (setq org-roam-index-file "~/org/index.org")
   (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/roam/inbox.org" "Tasks")

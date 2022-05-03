@@ -16,13 +16,14 @@
         :desc "Search Tab By Name" "SPC" #'tab-bar-select-tab-by-name
         :desc "Switch Tab" "s" #'tab-bar-switch-to-next-tab))
 
-(setq doom-font (font-spec :family "Fira Mono" :size 16))
+(setq doom-font (font-spec :family "Hack" :size 18))
 ;(setq doom-theme 'doom-gruvbox)
 ;(setq doom-theme 'doom-dracula)
 ;(setq doom-theme 'doom-Iosvkem)
 ;(setq doom-theme 'gruber-darker)
 ;(setq tao-theme-use-sepia nil)
-(setq doom-theme 'doom-one-light)
+(require 'modus-themes)
+(setq doom-theme 'modus-vivendi)
 
 (beacon-mode 1)
 
@@ -34,7 +35,10 @@
       org-ellipsis " ▾"
       org-log-done 'time
       org-directory "~/org/"
-      org-agenda-files '("~/org/roam/daily"))
+      org-agenda-files '("~/org/roam/daily")
+      org-todo-keywords '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" ))
+      org-todo-keywords-1 '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)" ))
+      )
   (setq org-roam-index-file "~/org/index.org")
   (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/roam/inbox.org" "Tasks")
@@ -53,6 +57,9 @@
 (add-hook 'text-mode-hook
           'olivetti-mode)
 (olivetti-set-width 100)
+
+(after! rustic
+  (setq rustic-lsp-server 'rls))
 
 ;Org journal
 ;Currently disabled as I am trying to use org-roam-dailies instead of org-journal
